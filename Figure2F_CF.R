@@ -1,0 +1,27 @@
+library(tidyverse)
+library(dplyr)
+Genes <- read.table("Other_genes2.txt", header=T, sep="\t")
+Genes <- transform(Genes, Group=factor(Group, levels=c("Methy", "TFs", "SFs", "CRFs", "Other", "No")))
+#Genes.long <- Genes %>% tidyr::gather(key=Gene, value=VAF, -ID, -gID, -Sex, -Subtype, -Other)
+#Genes.long <- filter(Genes.long, VAF>0)
+#Genes.long <- transform(Genes.long, Gene=factor(Gene, levels=c("PHF6", "Methy", "TFs", "SFs", "CR", "Other")))
+
+library(ggplot2)
+g <- ggplot(Genes, aes(x=gID, y=PHF6))
+#g <- g + geom_point(size=2)
+g <- g + geom_bar(stat="identity", fill="black")
+g <- g + scale_x_continuous(expand=c(0,0), limits=c(0, 93))
+g <- g + scale_y_continuous(expand=c(0,0), limits=c(0, 1.05))
+g <- g + theme_classic()
+#g <- g + scale_color_manual(values=c("black", "#0073c2", "#efc000", "#868686", "#CD534C"))
+#g <- g + theme(legend.position="none")
+g
+
+g <- ggplot(Genes, aes(x=gID, y=Myeloid, fill=Group))
+g <- g + geom_bar(stat="identity")
+g <- g + scale_x_continuous(expand=c(0,0), limits=c(0, 93))
+g <- g + scale_y_continuous(expand=c(0,0), limits=c(0, 1.05))
+g <- g + theme_classic()
+g <- g + scale_fill_manual(values=c("#0073c2", "#efc000", "#868686", "#CD534C", "#7AA6DC", "white"))
+g <- g + theme(legend.position="none")
+g

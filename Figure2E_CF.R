@@ -1,0 +1,31 @@
+library(tidyverse)
+library(ggplot2)
+library(ggsci)
+#PHF6 vs RUNX1
+PHF6vsRUNX1 <- read.table("PHF6vsRUNX1.txt", header=T, sep="\t")
+Dx <- read.table("PHF6Dx.txt", header=T, sep="\t")
+PHF6vsRUNX1 <- left_join(PHF6vsRUNX1, Dx)
+PHF6vsRUNX1 <- filter(PHF6vsRUNX1, Dx=="AML")
+#PHF6vsRUNX1 <- transform(PHF6vsRUNX1, Sex=factor(Sex, levels=c("M", "F")))
+g <- ggplot(PHF6vsRUNX1, aes(x=PHF6_VAF, y=RUNX1_VAF))
+g <- g + geom_point(aes(color=Subtype), size=3)
+g <- g + xlab("PHF6 VAF") + ylab("RUNX1 VAF")
+g <- g + geom_abline(intercept=0, slope=1, linetype=3)
+g <- g + scale_x_continuous(limits=c(0,1.05), expand=c(0,0))
+g <- g + scale_y_continuous(limits=c(0,1.05), expand=c(0,0))
+g <- g + theme_classic()
+g <- g + scale_color_nejm()
+g
+
+#PHF6 vs U2AF1
+PHF6vsU2AF1 <- read.table("PHF6vsU2AF1.txt", header=T, sep="\t")
+PHF6vsU2AF1 <- transform(PHF6vsU2AF1, Sex=factor(Sex, levels=c("M", "F")))
+g <- ggplot(PHF6vsU2AF1, aes(x=PHF6_VAF, y=U2AF1_VAF))
+g <- g + geom_point(aes(color=Sex), size=3)
+g <- g + xlab("PHF6 VAF") + ylab("U2AF1 VAF")
+g <- g + geom_abline(intercept=0, slope=1, linetype=3)
+g <- g + scale_x_continuous(limits=c(0,1.05), expand=c(0,0))
+g <- g + scale_y_continuous(limits=c(0,1.05), expand=c(0,0))
+g <- g + theme_classic()
+g <- g + scale_color_manual(values=c("#0072B5FF", "#BC3C29FF"))
+g
